@@ -12,11 +12,11 @@
 #define ALIPAY_ANIMATION
 
 
- CGFloat tile_space = 5; //the space between tiles
+ CGFloat tile_space = 1; //the space between tiles
 
  NSInteger tile_in_line = 3; //the inital max tile number in one line
 
-CGFloat both_space = 5;
+CGFloat both_space = 0;
 CGFloat top_bottom_space = 0;
 //define the enum of tilte state
 
@@ -27,7 +27,7 @@ CGFloat top_bottom_space = 0;
     __block CGPoint startPos; //the touch point
     __block CGPoint originPos; //the tile original point
     
-    enum TouchState touchState; //the tile touch state
+//    enum TouchState touchState; //the tile touch state
     NSInteger currentTileCount; //the tile count up to now
     
     NSInteger preTouchID; //the button ID pretouched
@@ -35,6 +35,7 @@ CGFloat top_bottom_space = 0;
 }
 @property (nonatomic, strong) NSMutableArray *tileArray; //the titles array
 @property(nonatomic,strong)NSMutableArray *titleModelArray;
+@property(nonatomic,assign)enum TouchState touchState;
 @end
 
 @implementation PatternView
@@ -53,7 +54,7 @@ CGFloat top_bottom_space = 0;
 }
 -(BOOL)isEdit
 {
-    if (touchState == MOVE || touchState == SUSPEND) {
+    if (self.touchState == MOVE || self.touchState == SUSPEND) {
         return YES;
     }else
     {
@@ -113,20 +114,21 @@ CGFloat top_bottom_space = 0;
         {
             [tile setImage:[UIImage imageNamed:patternModel.iconImage] forState:UIControlStateNormal];
         }
-        
+        tile.backgroundColor = patternModel.backColor;
         
         
          [tile setTileText:patternModel.title clickText:nil];
         [tile addTarget:self action:@selector(tileClicked:) forControlEvents:UIControlEventTouchUpInside];
         [tile setDelButtonIcon:patternModel.closeImage];
         UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] init];
+         longGesture.minimumPressDuration = 0.5;
         [longGesture addTarget:self action:@selector(onLongGresture:)];
         [tile addGestureRecognizer:longGesture];
         
         
-        UIPanGestureRecognizer *pangestureRecognizer = [[UIPanGestureRecognizer alloc] init];
-        [pangestureRecognizer addTarget:self action:@selector(pangesture:)];
-        [tile addGestureRecognizer:pangestureRecognizer];
+//        UIPanGestureRecognizer *pangestureRecognizer = [[UIPanGestureRecognizer alloc] init];
+//        [pangestureRecognizer addTarget:self action:@selector(pangesture:)];
+//        [tile addGestureRecognizer:pangestureRecognizer];
         
         //add the Click event
         [tile addTarget:self action:@selector(tileClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -178,19 +180,19 @@ CGFloat top_bottom_space = 0;
     [self handleSequenceMove:sender];
 
 }
--(void)pangesture:(UIPanGestureRecognizer*)panGesture
-{
-    if ( touchState == SUSPEND ||  touchState == MOVE) {
-        [self handleSequenceMove:panGesture];
-    }
-}
+//-(void)pangesture:(UIPanGestureRecognizer*)panGesture
+//{
+//    if ( touchState == SUSPEND ||  touchState == MOVE) {
+//        [self handleSequenceMove:panGesture];
+//    }
+//}
 -(void)beginEdit
 {
     for (TileButton *titleButton in self.tileArray) {
         
         [titleButton tileSuspended];
     }
-    touchState = SUSPEND;
+    self.touchState = SUSPEND;
 
 }///开始编辑
 //method 2: move the tiles inorder like Alipay, the order in array remains in sequence always
@@ -210,8 +212,10 @@ CGFloat top_bottom_space = 0;
                 
                 [titleButton tileSuspended];
             }
-            touchState = SUSPEND;
+            self.touchState = SUSPEND;
+            [self bringSubviewToFront:tile_btn];
             preTouchID = tile_btn.index; //save the ID of pretouched title
+            [tile_btn tileLongPressed];
             break;
             case UIGestureRecognizerStateChanged:
         {
@@ -219,7 +223,7 @@ CGFloat top_bottom_space = 0;
                 return;
             }
             [tile_btn tileLongPressed];
-            touchState = MOVE; //the tile will move
+            self.touchState = MOVE; //the tile will move
             CGPoint newPoint = [sender locationInView:sender.view];
             CGFloat offsetX = newPoint.x - startPos.x;
             CGFloat offsetY = newPoint.y - startPos.y;
@@ -324,11 +328,12 @@ CGFloat top_bottom_space = 0;
             [UIView animateWithDuration:0.3 animations:^{
                 tile_btn.center = originPos;
             }];
-            if(touchState == MOVE) //only if the pre state is MOVE, then settle, otherwise leave it suspend
+            if(self.touchState == MOVE) //only if the pre state is MOVE, then settle, otherwise leave it suspend
             {
-                [tile_btn tileSettl]; //settle the tile to the new position(no need to use delay operation here)
                 [self editChanged];
             }
+            [tile_btn tileSettl]; //settle the tile to the new position(no need to use delay operation here)
+            
         }
             
             break;
@@ -343,6 +348,10 @@ CGFloat top_bottom_space = 0;
         [self.patternDelegate patternView:self changedList:[self changedList] ];
     }
 }
+-(NSArray*)nowPatternDataArray
+{
+    return [self changedList];
+}
 -(NSArray*)changedList
 {
     NSMutableArray *patternArray = @[].mutableCopy;
@@ -355,14 +364,14 @@ CGFloat top_bottom_space = 0;
 - (void)tileClicked:(TileButton *)button
 {
     
-    if(touchState == SUSPEND || touchState == MOVE)
+    if(self.touchState == SUSPEND || self.touchState == MOVE)
     {
-        for (TileButton *tileButton in self.tileArray) {
-            [tileButton tileSettled];
-        }
-        touchState = UNTOUCHED;
+//        for (TileButton *tileButton in self.tileArray) {
+//            [tileButton tileSettled];
+//        }
+//        self.touchState = UNTOUCHED;
     }
-    else if(touchState == UNTOUCHED)
+    else if(self.touchState == UNTOUCHED)
     {
         if (_patternDelegate && [_patternDelegate respondsToSelector:@selector(patternView:clickIndex:patternModel:)]) {
             [_patternDelegate patternView:self clickIndex:button.index patternModel:button.patternModel];
@@ -373,13 +382,27 @@ CGFloat top_bottom_space = 0;
 }
 -(void)closeEdit///关闭编辑
 {
-    if(touchState == SUSPEND || touchState == MOVE)
+    if(self.touchState == SUSPEND || self.touchState == MOVE)
     {
         for (TileButton *tileButton in self.tileArray) {
             [tileButton tileSettled];
         }
-        touchState = UNTOUCHED;
+        self.touchState = UNTOUCHED;
         NSLog(@"suspend canceld");
+    }
+}
+-(void)setTouchState:(enum TouchState)touchState
+{
+    _touchState = touchState;
+    if (_touchState == SUSPEND) {
+        if (_patternDelegate && [_patternDelegate respondsToSelector:@selector(patternViewBeginEdit:)]) {
+            [_patternDelegate patternViewBeginEdit:self];
+        }
+    }else if(_touchState == UNTOUCHED)
+    {
+        if (_patternDelegate && [_patternDelegate respondsToSelector:@selector(patternViewEndEdit:)]) {
+            [_patternDelegate patternViewEndEdit:self];
+        }
     }
 }
 //tile delete button clicked

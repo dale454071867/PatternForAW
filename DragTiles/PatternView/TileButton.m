@@ -22,9 +22,6 @@
     if(self)
     {
         //set the main button style，in the tile button we can add many things
-        self.backgroundColor = [UIColor yellowColor];
-        [self setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//        [self setTitleColor:[UIColor greenColor] forState:UIControlEventTouchDown];
         
         //add the delete button
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -59,7 +56,7 @@
     //make the tile half transparent and show the deletebutton
     [_deleteButton setHidden:NO]; //show the deletebutton
     [UIView animateWithDuration:0.3 animations:^{
-        self.alpha = 0.6;
+    
         self.transform = CGAffineTransformMakeScale(1.1, 1.1);
         _deleteButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
     }];
@@ -70,7 +67,7 @@
 {
     [_deleteButton setHidden:NO];
     [UIView animateWithDuration:0.3 animations:^{
-        self.alpha = 0.6;
+
         self.transform = CGAffineTransformMakeScale(1.0, 1.0);
         _deleteButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
     }];
@@ -79,7 +76,7 @@
 - (void)tileSettled
 {
     [UIView animateWithDuration:0.3 animations:^{
-        self.alpha = 1.0;
+
         self.transform = CGAffineTransformMakeScale(1.0, 1.0);
         _deleteButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
     }];

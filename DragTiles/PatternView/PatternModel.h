@@ -14,5 +14,5 @@
 @property(nonatomic,strong)NSString *closeImage;
 @property(nonatomic,strong)NSString *iconImage;
 
-@property(nonatomic,strong)NSMutableDictionary *otherDic;
+@property(nonatomic,strong)id other;
 @end
