@@ -8,6 +8,7 @@
 
 #import "PatternView.h"
 #import "TileButton.h"
+#import <UIButton+WebCache.h>
 #define ALIPAY_ANIMATION
 
 
@@ -44,6 +45,11 @@ CGFloat both_space = 5;
     // Drawing code
 }
 */
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+//    [self reloadate];
+}
 -(BOOL)isEdit
 {
     if (touchState == MOVE || touchState == SUSPEND) {
@@ -94,7 +100,15 @@ CGFloat both_space = 5;
                                                                         tile_space/2 + yID * (tile_space + tileSize),
                                                                         tileSize, tileSize)];
         tile.patternModel = patternModel;
-        [tile setImage:[UIImage imageNamed:patternModel.iconImage] forState:UIControlStateNormal];
+        if ([patternModel.iconImage hasPrefix:@"http"]) {
+            [tile sd_setImageWithURL:[NSURL URLWithString:patternModel.iconImage] forState:UIControlStateNormal];
+        }else
+        {
+            [tile setImage:[UIImage imageNamed:patternModel.iconImage] forState:UIControlStateNormal];
+        }
+        
+        
+        
          [tile setTileText:patternModel.title clickText:nil];
         [tile addTarget:self action:@selector(tileClicked:) forControlEvents:UIControlEventTouchUpInside];
         [tile setDelButtonIcon:patternModel.closeImage];
