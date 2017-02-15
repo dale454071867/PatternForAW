@@ -26,6 +26,8 @@ enum TouchState
 @property(nonatomic,strong)NSNumber *tile_in_line;///一行多少个
 @property(nonatomic,strong)NSNumber *tile_space;///间隙多少
 @property(nonatomic,strong)NSNumber *both_space;//两边的间隙
+@property(nonatomic,strong)NSNumber *top_bottom_space;//上下两端的距离
+@property(nonatomic,strong)NSNumber *tile_height;//每个的高度
 @property(nonatomic,assign)id<PatternViewDelegate> patternDelegate;
 -(void)closeEdit;///关闭编辑
 -(void)beginEdit;///开始编辑

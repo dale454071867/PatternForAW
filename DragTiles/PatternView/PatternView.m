@@ -17,6 +17,7 @@
  NSInteger tile_in_line = 3; //the inital max tile number in one line
 
 CGFloat both_space = 5;
+CGFloat top_bottom_space = 0;
 //define the enum of tilte state
 
 
@@ -88,17 +89,23 @@ CGFloat both_space = 5;
     if (self.both_space) {
         both_space = [self.both_space floatValue];
     }
+    if (self.top_bottom_space) {
+        top_bottom_space = [self.top_bottom_space floatValue];
+    }
+    
     for (PatternModel *patternModel in self.patternDataArray) {
         
-        CGFloat tileSize = (self.frame.size.width - both_space*2 - tile_space * tile_in_line) / tile_in_line;
+        CGFloat tileSize = (self.frame.size.width - both_space*2 - tile_space * (tile_in_line-1)) / tile_in_line;
         
         //add the tiles
         NSInteger xID = currentTileCount % tile_in_line; //tile id of column
         NSInteger yID = currentTileCount / tile_in_line; //tile id of row
         
-        TileButton *tile = [[TileButton alloc] initWithFrame:CGRectMake(tile_space/2 + xID * (tile_space + tileSize) + both_space,
-                                                                        tile_space/2 + yID * (tile_space + tileSize),
-                                                                        tileSize, tileSize)];
+        CGFloat tileHeight = self.tile_height?[self.tile_height floatValue]:tileSize;
+        
+        TileButton *tile = [[TileButton alloc] initWithFrame:CGRectMake( xID * (tile_space + tileSize) + both_space,
+                                                                         yID * (tile_space + tileHeight) + top_bottom_space,
+                                                                        tileSize, tileHeight)];
         tile.patternModel = patternModel;
         if ([patternModel.iconImage hasPrefix:@"http"]) {
             [tile sd_setImageWithURL:[NSURL URLWithString:patternModel.iconImage] forState:UIControlStateNormal];
@@ -132,9 +139,9 @@ CGFloat both_space = 5;
         tile.index = currentTileCount; //set the tile index in the array
         //set the button text
         currentTileCount++; //increase the tile count
-        if(tile.frame.origin.y + tileSize > self.frame.size.height)
+        if(tile.frame.origin.y + tileHeight > self.frame.size.height)
         {
-            self.contentSize = CGSizeMake(self.contentSize.width, tile.frame.origin.y + tileSize + tile_space/2);
+            self.contentSize = CGSizeMake(self.contentSize.width, tile.frame.origin.y + tileHeight + top_bottom_space);
             
         }else
         {

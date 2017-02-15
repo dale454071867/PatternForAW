@@ -29,7 +29,7 @@
         //add the delete button
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        _deleteButton.frame = CGRectMake(self.bounds.size.width*6/7.0, 0, self.frame.size.width/7.0, self.frame.size.height/7.0); //use the relative coordinates
+        _deleteButton.frame = CGRectMake(self.bounds.size.width*6/7.0, 0, self.frame.size.width/7.0, self.frame.size.width/7.0); //use the relative coordinates
 //        _deleteButton.backgroundColor = [UIColor redColor];
         _deleteButton.transform = CGAffineTransformMakeScale(0.1, 0.1); //set the deletebutton small at the beginning
         _deleteButton.hidden = YES; //hide it at the beginning

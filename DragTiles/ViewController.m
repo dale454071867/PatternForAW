@@ -74,7 +74,7 @@
     for (NSInteger i = 0; i<10; i++) {
         PatternModel *patternModel = [PatternModel new];
         patternModel.title = [NSString stringWithFormat:@"%ld",i];
-        patternModel.backColor = [UIColor grayColor];
+        patternModel.backColor = [UIColor redColor];
         patternModel.iconImage = @"allkpis";
         patternModel.closeImage = @"guanbi";
         [array addObject:patternModel];
@@ -84,7 +84,9 @@
     self.patternView.patternDataArray = array;
     self.patternView.isCanEdit = YES;
     self.patternView.isCanMove = YES;
-    self.patternView.tile_in_line = @(2);
+    self.patternView.tile_height = @(600);
+    self.patternView.tile_in_line = @(3);
+    self.patternView.both_space = @(0);
     [self.view addSubview:self.patternView];
     
     [self.patternView reloadate];
