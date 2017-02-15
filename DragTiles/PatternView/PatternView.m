@@ -8,7 +8,7 @@
 
 #import "PatternView.h"
 #import "TileButton.h"
-#import <UIButton+WebCache.h>
+#import "UIButton+WebCache.h"
 #define ALIPAY_ANIMATION
 
 
