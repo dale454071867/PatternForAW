@@ -47,16 +47,7 @@
 @implementation ViewController
 
 
--(void)patternView:(PatternView *)patternView changedList:(NSArray *)patternDataArray
-{
-    for (PatternModel *patternModel in patternDataArray) {
-        NSLog(@"%@",patternModel.title);
-    }
-}
--(void)patternView:(PatternView *)patternView clickIndex:(NSInteger)index patternModel:(PatternModel *)patternModel
-{
-    NSLog(@"%ld",(long)index);
-}
+
 - (IBAction)begin:(id)sender {
     if (!self.patternView.isEdit) {
         [self.patternView  beginEdit];
@@ -100,6 +91,16 @@
 }
 ///结束编辑了
 -(void)patternViewEndEdit:(PatternView*)patternView
+{
+    
+}
+//删除后返回处理顺序
+-(void)patternView:(PatternView*)patternView removeList:(NSArray*)patternDataArray
+{
+    
+}
+///移动后后返回处理后的顺序
+-(void)patternView:(PatternView*)patternView changedList:(NSArray*)patternDataArray
 {
     
 }

@@ -212,7 +212,9 @@ CGFloat top_bottom_space = 0;
                 
                 [titleButton tileSuspended];
             }
-            self.touchState = SUSPEND;
+            if (self.touchState == UNTOUCHED) {
+                self.touchState = SUSPEND;
+            }
             [self bringSubviewToFront:tile_btn];
             preTouchID = tile_btn.index; //save the ID of pretouched title
             [tile_btn tileLongPressed];
@@ -330,7 +332,10 @@ CGFloat top_bottom_space = 0;
             }];
             if(self.touchState == MOVE) //only if the pre state is MOVE, then settle, otherwise leave it suspend
             {
-                [self editChanged];
+                if (self.patternDelegate && [_patternDelegate respondsToSelector:@selector(patternView:changedList:)]) {
+                    [self.patternDelegate patternView:self changedList:[self changedList] ];
+                }
+                _touchState = SUSPEND;
             }
             [tile_btn tileSettl]; //settle the tile to the new position(no need to use delay operation here)
             
@@ -342,12 +347,7 @@ CGFloat top_bottom_space = 0;
     }
     
 }
--(void)editChanged
-{
-    if (self.patternDelegate && [_patternDelegate respondsToSelector:@selector(patternView:changedList:)]) {
-        [self.patternDelegate patternView:self changedList:[self changedList] ];
-    }
-}
+
 -(NSArray*)nowPatternDataArray
 {
     return [self changedList];
@@ -439,7 +439,9 @@ CGFloat top_bottom_space = 0;
     [tileBtn removeFromSuperview]; //we can also use performselector so that button disappears with animation
     //test the display if the array is inorder
 
-    [self editChanged];
+    if (self.patternDelegate && [_patternDelegate respondsToSelector:@selector(patternView:removeList:)]) {
+        [self.patternDelegate patternView:self removeList:[self changedList] ];
+    }
     
 }
 

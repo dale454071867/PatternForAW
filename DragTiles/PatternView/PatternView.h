@@ -38,8 +38,10 @@ enum TouchState
 @protocol PatternViewDelegate <NSObject>
 ///点击cell的时候
 -(void)patternView:(PatternView*)patternView clickIndex:(NSInteger)index patternModel:(PatternModel*)patternModel;
-///移动后或删除后返回处理后的顺序
+///移动后后返回处理后的顺序
 -(void)patternView:(PatternView*)patternView changedList:(NSArray*)patternDataArray;
+//删除后返回处理顺序
+-(void)patternView:(PatternView*)patternView removeList:(NSArray*)patternDataArray;
 ///开始编辑了
 -(void)patternViewBeginEdit:(PatternView*)patternView;
 ///结束编辑了
