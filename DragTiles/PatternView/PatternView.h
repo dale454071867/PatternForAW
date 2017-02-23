@@ -32,7 +32,7 @@ enum TouchState
 @property(nonatomic,assign)id<PatternViewDelegate> patternDelegate;
 -(void)closeEdit;///关闭编辑
 -(void)beginEdit;///开始编辑
--(void)reloadate;///刷新
+-(void)reloaDate;///刷新
 @end
 
 @protocol PatternViewDelegate <NSObject>

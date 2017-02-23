@@ -14,5 +14,9 @@
 @property(nonatomic,strong)NSString *closeImage;
 @property(nonatomic,strong)NSString *iconImage;
 
+@property(nonatomic,strong)NSString *placeImage;
+@property(nonatomic,strong)UIFont *font;
+@property(nonatomic,strong)UIColor *textColor;
+
 @property(nonatomic,strong)id other;
 @end

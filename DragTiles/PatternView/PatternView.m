@@ -73,7 +73,7 @@ CGFloat top_bottom_space = 0;
     }
     return _tileArray;
 }
--(void)reloadate
+-(void)reloaDate
 {
     for (UIView *view in self.subviews) {
         [view removeFromSuperview];
@@ -108,6 +108,7 @@ CGFloat top_bottom_space = 0;
                                                                          yID * (tile_space + tileHeight) + top_bottom_space,
                                                                         tileSize, tileHeight)];
         tile.patternModel = patternModel;
+        [tile setImage:[UIImage imageNamed:patternModel.placeImage] forState:UIControlStateNormal];
         if ([patternModel.iconImage hasPrefix:@"http"]) {
             [tile sd_setImageWithURL:[NSURL URLWithString:patternModel.iconImage] forState:UIControlStateNormal];
         }else
@@ -115,7 +116,8 @@ CGFloat top_bottom_space = 0;
             [tile setImage:[UIImage imageNamed:patternModel.iconImage] forState:UIControlStateNormal];
         }
         tile.backgroundColor = patternModel.backColor;
-        
+        tile.titleLabel.font = patternModel.font;
+        tile.titleLabel.textColor = patternModel.textColor;
         
          [tile setTileText:patternModel.title clickText:nil];
         [tile addTarget:self action:@selector(tileClicked:) forControlEvents:UIControlEventTouchUpInside];
